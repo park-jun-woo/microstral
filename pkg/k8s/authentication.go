@@ -24,7 +24,7 @@ func (c *Client) TokenReview(token string) (*authenticationv1.TokenReview, error
 	// TokenReview 요청 보내기: 클러스터의 인증 API를 호출하여 토큰 검증 결과를 받습니다.
 	result, err := c.clientset.AuthenticationV1().TokenReviews().Create(context.Background(), tokenReview, metav1.CreateOptions{})
 	if err != nil {
-		panic(err.Error())
+		return nil, err
 	}
 
 	return result, nil

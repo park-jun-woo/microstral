@@ -30,3 +30,8 @@ go.work.sum
 # Editor/IDE
 # .idea/
 # .vscode/
+
+# SSH private keys
+*.pem
+*.key
+*.crt

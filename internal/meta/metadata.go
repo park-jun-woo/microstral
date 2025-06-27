@@ -16,45 +16,45 @@ type Metadata struct {
 }
 
 // Role이 있는지 확인
-func (c *Metadata) HasRoles(roles []uint32) bool {
+func (m *Metadata) HasRoles(roles []uint32) bool {
 
 	return false
 }
 
 // Role 추가
-func (c *Metadata) Role(role uint32) *Metadata {
-	c.Roles = append(c.Roles, role)
-	return c
+func (m *Metadata) Role(role uint32) *Metadata {
+	m.Roles = append(m.Roles, role)
+	return m
 }
 
 // Param 추가
-func (c *Metadata) Param(name string, def string, typ uint32) *Metadata {
-	c.Params[name] = param.Param{
+func (m *Metadata) Param(name string, def string, typ uint32) *Metadata {
+	m.Params[name] = param.Param{
 		Name:    name,
 		Default: def,
 		Type:    typ,
 	}
-	return c
+	return m
 }
 
 // Flag Param 추가
-func (c *Metadata) Flag(name string, def string, flag uint64) *Metadata {
-	c.Params[name] = param.Param{
+func (m *Metadata) Flag(name string, def string, flag uint64) *Metadata {
+	m.Params[name] = param.Param{
 		Name:    name,
 		Default: def,
 		Type:    param.FLAG,
 		Flag:    flag,
 	}
-	return c
+	return m
 }
 
 // Regexp Param 추가
-func (c *Metadata) Regexp(name string, def string, pattern string) *Metadata {
-	c.Params[name] = param.Param{
+func (m *Metadata) Regexp(name string, def string, pattern string) *Metadata {
+	m.Params[name] = param.Param{
 		Name:    name,
 		Default: def,
 		Type:    param.REGEX,
 		Regex:   regexp.MustCompile(pattern),
 	}
-	return c
+	return m
 }

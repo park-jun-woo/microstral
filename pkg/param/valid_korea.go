@@ -1,3 +1,4 @@
+// https://parkjunwoo.com/microstral/pkg/param/valid_korea.go
 package param
 
 import (
@@ -6,6 +7,7 @@ import (
 )
 
 func init() {
+	RegisterValidFunc(TITLE, ValidTitle)
 	RegisterValidFunc(SSN_KR, ValidSSNKR)
 	RegisterValidFunc(RRN_KR, ValidRRNKR)
 	RegisterValidFunc(BRN_KR, ValidBRNKR)
@@ -16,6 +18,7 @@ func init() {
 }
 
 var (
+	regTitle        = regexp.MustCompile(`^[가-힣a-zA-Z0-9 .,!?\[\]\(\)_\-@&/|$%*+~^:={}'"]+$`)
 	regexSSNKR      = regexp.MustCompile(`^(\d{6})-?[1-4]{1}\d{6}$`)
 	regexRRNKR      = regexp.MustCompile(`^(\d{6})-?[5-8]{1}\d{6}$`)
 	regexBRNKR      = regexp.MustCompile(`^(\d{3})-?(\d{2})-?(\d{5})$`)
@@ -24,6 +27,11 @@ var (
 	regexDLKR       = regexp.MustCompile(`^\d{2}-?\d{2}-?\d{6}-?\d{2}$`)
 	regexZipcodeKR  = regexp.MustCompile(`^\d{5}$`)
 )
+
+// ValidTitle은 제목 형식이 맞는지 확인합니다.
+func ValidTitle(value string) (bool, error) {
+	return regTitle.MatchString(value), nil
+}
 
 // ValidSSN은 주민등록번호 형식이 맞는지 확인합니다.
 func ValidSSNKR(value string) (bool, error) {

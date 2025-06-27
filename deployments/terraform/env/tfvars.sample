@@ -1,0 +1,6 @@
+# https://parkjunwoo.com/microstral/deployments/terraform/env/tfvars.sample
+
+project    = "sample"
+workspace  = "prod"
+aws_region = "ap-northeast-2"
+domain     = "sample.com"

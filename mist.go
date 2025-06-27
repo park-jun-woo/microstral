@@ -1,3 +1,4 @@
+// https://parkjunwoo.com/microstral/mist.go
 package mist
 
 import (
@@ -13,7 +14,7 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"parkjunwoo.com/microstral/pkg/env"
-	mhttp "parkjunwoo.com/microstral/pkg/http"
+	"parkjunwoo.com/microstral/pkg/mttp"
 	"parkjunwoo.com/microstral/pkg/param"
 	"parkjunwoo.com/microstral/pkg/services"
 
@@ -39,12 +40,12 @@ type Mist struct {
 	}
 
 	router *gin.Engine
-	httpc  *mhttp.Client
+	httpc  *mttp.Client
 }
 
 // New: Mist 서버 생성자
 func New(useMiddleware bool, strictURL bool) (*Mist, error) {
-	httpc := mhttp.NewClient()
+	httpc := mttp.NewClient()
 
 	s := &Mist{
 		host:   env.GetEnv("HOST", "mist"),
@@ -61,16 +62,13 @@ func New(useMiddleware bool, strictURL bool) (*Mist, error) {
 		// 인증 미들웨어 적용
 		s.router.Use(middleware.Auth())
 
-		// 메타데이터 미들웨어 적용
-		s.router.Use(middleware.Valid(s.metas, strictURL))
-
 		// 로깅 미들웨어 적용
 		s.router.Use(middleware.Logger())
 	}
 
 	// 헬스체크 엔드포인트
-	s.GET("/healthcheck", nil, services.Healthcheck)
-	s.GET("/live", nil, services.Healthcheck)
+	s.GET("/healthcheck", services.Healthcheck)
+	s.GET("/live", services.Healthcheck)
 
 	return s, nil
 }
@@ -133,7 +131,7 @@ func (s *Mist) GetRouter() *gin.Engine {
 	return s.router
 }
 
-func (s *Mist) GetHTTP() *mhttp.Client {
+func (s *Mist) GetHTTP() *mttp.Client {
 	return s.httpc
 }
 

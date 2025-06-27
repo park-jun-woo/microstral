@@ -1,3 +1,4 @@
+// https://parkjunwoo.com/microstral/pkg/param/valid_content.go
 package param
 
 import (
@@ -8,6 +9,7 @@ import (
 	"encoding/xml"
 	"fmt"
 	"io"
+	"regexp"
 	"strings"
 
 	"github.com/gomarkdown/markdown"
@@ -17,6 +19,7 @@ import (
 )
 
 func init() {
+	RegisterValidFunc(ID, ValidId)
 	RegisterValidFunc(HTML, ValidHTML)
 	RegisterValidFunc(JSON, ValidJSON)
 	RegisterValidFunc(XML, ValidXML)
@@ -25,6 +28,15 @@ func init() {
 	RegisterValidFunc(BASE64, ValidBASE64)
 	RegisterValidFunc(JWT, ValidJWT)
 	RegisterValidFunc(MARKDOWN, ValidMarkdown)
+}
+
+var (
+	regId = regexp.MustCompile(`^[a-zA-Z0-9]+$`)
+)
+
+// ValidId는 아이디 형식이 맞는지 확인합니다.
+func ValidId(value string) (bool, error) {
+	return regId.MatchString(value), nil
 }
 
 // ValidHTML은 문자열이 유효한 HTML인지 확인합니다.

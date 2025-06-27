@@ -1,3 +1,4 @@
+// https://parkjunwoo.com/microstral/pkg/param/types.go
 package param
 
 import "math"
