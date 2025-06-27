@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "postgres.fullname" . }}
+spec:
+  selector:
+    app: postgres-microstral
+  ports:
+    - protocol: TCP
+      port: "{{ .Values.postgres.service.port }}"
+      targetPort: 5432
+  type: ClusterIP

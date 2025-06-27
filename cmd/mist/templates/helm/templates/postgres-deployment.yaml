@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "postgres.fullname" . }}
+  labels:
+    app: postgres-microstral
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres-microstral
+  template:
+    metadata:
+      labels:
+        app: postgres-microstral
+    spec:
+      containers:
+        - name: postgres
+          image: "{{ .Values.postgres.image.repository }}:{{ .Values.postgres.image.tag }}"
+          imagePullPolicy: "{{ .Values.postgres.image.pullPolicy }}"
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_DB
+              value: "{{ .Values.postgres.database.name }}"
+            - name: POSTGRES_USER
+              value: "{{ .Values.postgres.database.user }}"
+            - name: POSTGRES_PASSWORD
+              value: "{{ .Values.postgres.database.password }}"
+          resources:
+            limits:
+              cpu: "{{ .Values.postgres.resources.limits.cpu }}"
+              memory: "{{ .Values.postgres.resources.limits.memory }}"
+            requests:
+              cpu: "{{ .Values.postgres.resources.requests.cpu }}"
+              memory: "{{ .Values.postgres.resources.requests.memory }}"
+          livenessProbe:
+            tcpSocket:
+              port: 5432
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          readinessProbe:
+            tcpSocket:
+              port: 5432
+            initialDelaySeconds: 3
+            periodSeconds: 5
+          volumeMounts:
+            - name: postgres-storage
+              mountPath: /var/lib/postgres/data
+      volumes:
+        - name: postgres-storage
+          persistentVolumeClaim:
+            claimName: {{ include "postgres.pvcname" . }}

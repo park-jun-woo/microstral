@@ -1,0 +1,10 @@
+apiVersion: v2
+name: microstral
+description: A Helm chart for ua-parser-k8s microservice
+type: application
+version: 1.0.0
+appVersion: "latest"
+dependencies:
+  - name: ua-parser-k8s
+    version: ">=1.0.0"
+    repository: "https://www.parkjunwoo.com/charts"

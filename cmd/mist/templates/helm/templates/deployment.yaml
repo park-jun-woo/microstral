@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "microstral.fullname" . }}
+spec:
+  replicas: {{ .Values.microstral.replicaCount }}
+  selector:
+    matchLabels:
+      app: microstral
+  template:
+    metadata:
+      labels:
+        app: microstral
+    spec:
+      containers:
+        - name: microstral
+          image: "{{ .Values.microstral.image.repository }}:{{ .Values.microstral.image.tag }}"
+          imagePullPolicy: {{ .Values.microstral.image.pullPolicy }}
+          ports:
+            - containerPort: 80
+          envFrom:
+            - configMapRef:
+                name: {{ include "microstral.config" . }}
+          resources:
+            limits:
+              cpu: {{ .Values.microstral.resources.limits.cpu }}
+              memory: {{ .Values.microstral.resources.limits.memory }}
+            requests:
+              cpu: {{ .Values.microstral.resources.requests.cpu }}
+              memory: {{ .Values.microstral.resources.requests.memory }}
